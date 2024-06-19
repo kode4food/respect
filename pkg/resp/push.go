@@ -22,9 +22,10 @@ var _ interface {
 	Counted
 	Hasher
 	Collection
+	TopLevelOnly
 } = (*Push)(nil)
 
-func (*Push) aggregate() {}
+func (*Push) topLevel() {}
 
 func readPush(r *Reader) (*Push, error) {
 	res, err := r.readValues()

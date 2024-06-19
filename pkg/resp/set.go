@@ -27,8 +27,6 @@ var _ interface {
 	Collection
 } = (*Set)(nil)
 
-func (*Set) aggregate() {}
-
 func readSet(r *Reader) (*Set, error) {
 	resLen, err := r.readLen()
 	if err != nil {

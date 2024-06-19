@@ -20,8 +20,6 @@ var (
 	emptyAttributeHash = rand.Uint64()
 )
 
-func (*Attribute) aggregate() {}
-
 func readAttribute(r *Reader) (*Attribute, error) {
 	m, err := readMapped(r)
 	if err != nil {

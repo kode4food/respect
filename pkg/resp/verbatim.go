@@ -29,9 +29,6 @@ var (
 // compile-time check for interface implementation
 var _ String = (*VerbatimString)(nil)
 
-func (*VerbatimString) string() {}
-func (*VerbatimString) bulk()   {}
-
 func MakeVerbatimString(enc string, data string) (*VerbatimString, error) {
 	e, err := makeEncoding(enc)
 	if err != nil {

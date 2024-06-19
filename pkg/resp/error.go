@@ -10,9 +10,9 @@ import (
 type (
 	Error interface {
 		Value
-		error()
-		Prefix() string
+		TopLevelOnly
 		fmt.Stringer
+		Prefix() string
 		error
 	}
 
@@ -30,10 +30,8 @@ var (
 	_ Error = (*BulkError)(nil)
 )
 
-func (*SimpleError) error()  {}
-func (*SimpleError) simple() {}
-func (*BulkError) error()    {}
-func (*BulkError) bulk()     {}
+func (*SimpleError) topLevel() {}
+func (*BulkError) topLevel()   {}
 
 func readSimpleError(r *Reader) (*SimpleError, error) {
 	data, err := r.readSimple()

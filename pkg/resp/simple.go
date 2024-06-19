@@ -30,9 +30,6 @@ var (
 	_ Value = Boolean(false)
 )
 
-func (Null) simple()    {}
-func (Boolean) simple() {}
-
 func readNull(r *Reader) (Null, error) {
 	data, err := r.readSimple()
 	if err != nil {

@@ -32,11 +32,6 @@ var (
 	_ String = BulkString("")
 )
 
-func (SimpleString) string() {}
-func (SimpleString) simple() {}
-func (BulkString) string()   {}
-func (BulkString) bulk()     {}
-
 func MakeString(s string) String {
 	if bytes.Contains([]byte(s), NewLine) {
 		return BulkString(s)

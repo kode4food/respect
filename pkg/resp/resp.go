@@ -36,21 +36,6 @@ type (
 		Count() int
 	}
 
-	Simple interface {
-		Value
-		simple()
-	}
-
-	Bulk interface {
-		Value
-		bulk()
-	}
-
-	Aggregate interface {
-		Value
-		aggregate()
-	}
-
 	TopLevelOnly interface {
 		Value
 		topLevel()

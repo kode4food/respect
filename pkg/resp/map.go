@@ -27,8 +27,6 @@ var (
 // compile-time check for interface implementation
 var _ Mapped = (*Map)(nil)
 
-func (*Map) aggregate() {}
-
 func readMap(r *Reader) (*Map, error) {
 	m, err := readMapped(r)
 	if err != nil {

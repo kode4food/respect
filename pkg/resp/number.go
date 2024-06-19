@@ -31,10 +31,6 @@ var (
 	_ Value = (*BigNumber)(nil)
 )
 
-func (Integer) simple()    {}
-func (Double) simple()     {}
-func (*BigNumber) simple() {}
-
 func readInteger(r *Reader) (Integer, error) {
 	i, err := r.readInt64()
 	if err != nil {

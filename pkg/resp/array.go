@@ -24,8 +24,6 @@ var _ interface {
 	Collection
 } = (*Array)(nil)
 
-func (*Array) aggregate() {}
-
 func readArray(r *Reader) (*Array, error) {
 	res, err := r.readValues()
 	if err != nil {
