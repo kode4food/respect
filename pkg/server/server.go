@@ -15,7 +15,7 @@ import (
 
 type (
 	Server struct {
-		config Config
+		*Config
 	}
 
 	Config struct {
@@ -29,7 +29,7 @@ type (
 	ReaderMaker func(*bufio.Reader, ...resp.ReaderOption) *resp.Reader
 
 	socketContext struct {
-		*Config
+		*Server
 
 		conn   net.Conn
 		reader *resp.Reader
@@ -55,9 +55,8 @@ var defaultOptions = []Option{
 
 func NewServer(opts ...Option) *Server {
 	res := &Server{}
-	all := append(defaultOptions, opts...)
-	for _, opt := range all {
-		opt(&res.config)
+	for _, opt := range append(defaultOptions, opts...) {
+		opt(res.Config)
 	}
 	return res
 }
@@ -92,7 +91,7 @@ func WithEnvPort() Option {
 }
 
 func (s *Server) Start() error {
-	listener, err := net.Listen("tcp", ":"+strconv.Itoa(s.config.Port))
+	listener, err := net.Listen("tcp", ":"+strconv.Itoa(s.Port))
 	if err != nil {
 		return err
 	}
@@ -120,10 +119,10 @@ func (s *Server) handleConnection(conn net.Conn) {
 
 func (s *Server) makeContext(conn net.Conn) *socketContext {
 	return &socketContext{
-		Config: &s.config,
+		Server: s,
 
 		conn:   conn,
-		reader: s.config.MakeReader(bufio.NewReader(conn)),
+		reader: s.MakeReader(bufio.NewReader(conn)),
 		writer: bufio.NewWriter(conn),
 
 		input:  make(chan resp.Value),

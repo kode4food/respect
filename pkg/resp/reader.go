@@ -46,12 +46,12 @@ var (
 )
 
 // NewReader configures a new RESP Reader
-func NewReader(r *bufio.Reader, options ...ReaderOption) *Reader {
+func NewReader(r *bufio.Reader, opts ...ReaderOption) *Reader {
 	res := &Reader{
 		input:   r,
 		readers: map[Tag]ReaderFunc{},
 	}
-	for _, opt := range append(defaultReaderOptions, options...) {
+	for _, opt := range append(defaultReaderOptions, opts...) {
 		opt(res)
 	}
 	return res
