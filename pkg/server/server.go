@@ -151,14 +151,16 @@ func (c *socketContext) readLoop() {
 			return
 		default:
 			value, err := c.reader.Next()
-			if err != nil {
-				if errors.Is(err, io.EOF) {
-					_ = c.Close()
-					return
-				}
+			if err == nil {
+				c.input <- value
+				continue
+			}
+			if errors.Is(err, io.EOF) {
+				_ = c.Close()
+			} else {
 				c.forwardError(err)
 			}
-			c.input <- value
+			return
 		}
 	}
 }
