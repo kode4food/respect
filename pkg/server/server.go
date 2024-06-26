@@ -54,7 +54,9 @@ var defaultOptions = []Option{
 }
 
 func NewServer(opts ...Option) *Server {
-	res := &Server{}
+	res := &Server{
+		Config: &Config{},
+	}
 	for _, opt := range append(defaultOptions, opts...) {
 		opt(res.Config)
 	}
