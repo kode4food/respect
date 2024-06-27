@@ -11,13 +11,17 @@ import (
 
 type (
 	Reader struct {
-		input        *bufio.Reader
+		ReaderConfig
+		input   *bufio.Reader
+		nesting int
+	}
+
+	ReaderConfig struct {
 		readers      map[Tag]ReaderFunc
-		nesting      int
 		v2Compatible bool
 	}
 
-	ReaderOption func(*Reader)
+	ReaderOption func(*ReaderConfig)
 
 	ReaderFunc func(*Reader) (Value, error)
 )
@@ -41,6 +45,7 @@ var (
 	v2NullLen = len(v2Null)
 
 	defaultReaderOptions = []ReaderOption{
+		initConfig,
 		DefaultReaders,
 	}
 )
@@ -48,11 +53,10 @@ var (
 // NewReader configures a new RESP Reader
 func NewReader(r *bufio.Reader, opts ...ReaderOption) *Reader {
 	res := &Reader{
-		input:   r,
-		readers: map[Tag]ReaderFunc{},
+		input: r,
 	}
 	for _, opt := range append(defaultReaderOptions, opts...) {
-		opt(res)
+		opt(&res.ReaderConfig)
 	}
 	return res
 }
@@ -83,11 +87,15 @@ func V2Compatible(r *Reader) {
 
 func WithReaderFuncs(m map[Tag]ReaderFunc) ReaderOption {
 	readers := maps.Clone(m)
-	return func(r *Reader) {
+	return func(c *ReaderConfig) {
 		for k, v := range readers {
-			r.readers[k] = v
+			c.readers[k] = v
 		}
 	}
+}
+
+func initConfig(c *ReaderConfig) {
+	c.readers = make(map[Tag]ReaderFunc)
 }
 
 // Next returns the next parsed value from the RESP ReaderFunc, or an error

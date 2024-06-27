@@ -15,7 +15,7 @@ import (
 
 type (
 	Server struct {
-		*Config
+		Config
 	}
 
 	Config struct {
@@ -54,11 +54,9 @@ var defaultOptions = []Option{
 }
 
 func NewServer(opts ...Option) *Server {
-	res := &Server{
-		Config: &Config{},
-	}
+	res := &Server{}
 	for _, opt := range append(defaultOptions, opts...) {
-		opt(res.Config)
+		opt(&res.Config)
 	}
 	return res
 }
