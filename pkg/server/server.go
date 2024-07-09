@@ -3,6 +3,7 @@ package server
 import (
 	"bufio"
 	"errors"
+	"fmt"
 	"io"
 	"net"
 	"os"
@@ -21,7 +22,7 @@ type (
 	Config struct {
 		MakeReader ReaderMaker
 		Handler    command.Handler
-		Port       int
+		Address    string
 	}
 
 	Option func(*Config)
@@ -46,11 +47,9 @@ type (
 const DefaultPort = 6379
 
 var defaultOptions = []Option{
-	func(c *Config) {
-		c.MakeReader = resp.NewReader
-		c.Handler = command.NewHandler(command.Handlers{})
-		c.Port = DefaultPort
-	},
+	WithReaderMaker(resp.NewReader),
+	WithHandler(command.NewHandler(command.Handlers{})),
+	WithPort(DefaultPort),
 }
 
 func NewServer(opts ...Option) *Server {
@@ -61,10 +60,14 @@ func NewServer(opts ...Option) *Server {
 	return res
 }
 
-func WithPort(port int) Option {
+func WithAddress(address string) Option {
 	return func(c *Config) {
-		c.Port = port
+		c.Address = address
 	}
+}
+
+func WithPort(port int) Option {
+	return WithAddress(fmt.Sprintf(":%d", port))
 }
 
 func WithReaderMaker(m ReaderMaker) Option {
@@ -91,7 +94,7 @@ func WithEnvPort() Option {
 }
 
 func (s *Server) Start() error {
-	listener, err := net.Listen("tcp", ":"+strconv.Itoa(s.Port))
+	listener, err := net.Listen("tcp", s.Address)
 	if err != nil {
 		return err
 	}

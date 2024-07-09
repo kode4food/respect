@@ -7,9 +7,9 @@ import (
 )
 
 type Set struct {
+	attr *Attribute
 	data hashedArray[Value]
 	hash uint64
-	attr *Attribute
 }
 
 var (

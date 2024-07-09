@@ -11,8 +11,8 @@ import (
 
 type (
 	Reader struct {
+		input *bufio.Reader
 		ReaderConfig
-		input   *bufio.Reader
 		nesting int
 	}
 
