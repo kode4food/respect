@@ -19,11 +19,11 @@ func TestBoolean(t *testing.T) {
 	}
 
 	for _, tc := range testCases {
-		v, err := readFromString(tc.input)
+		v, err := resp.ReadString(tc.input)
 		as.Nil(err)
 		as.Equal(resp.BooleanTag, v.Tag())
 		as.Equal(tc.expected, v.(resp.Boolean).Bool())
-		as.Equal(tc.input, marshalToString(v))
+		as.Equal(tc.input, resp.ToString(v))
 	}
 }
 
@@ -41,7 +41,7 @@ func TestBooleanErrors(t *testing.T) {
 	}
 
 	for _, tc := range testCases {
-		v, err := readFromString(tc.input)
+		v, err := resp.ReadString(tc.input)
 		as.Nil(v)
 		as.NotNil(err)
 		as.ErrorContains(err, tc.err)
@@ -51,18 +51,18 @@ func TestBooleanErrors(t *testing.T) {
 func TestNull(t *testing.T) {
 	as := assert.New(t)
 
-	v, err := readFromString("_\r\n")
+	v, err := resp.ReadString("_\r\n")
 	as.Equal(resp.NullValue, v)
 	as.Equal(resp.NullTag, v.Tag())
 	as.Nil(err)
-	as.Equal("_\r\n", marshalToString(v))
+	as.Equal("_\r\n", resp.ToString(v))
 
-	v, err = readFromString("_blah\r\n")
+	v, err = resp.ReadString("_blah\r\n")
 	as.Equal(resp.NullValue, v)
 	as.NotNil(err)
 	as.ErrorContains(err, "invalid length: 4")
 
-	v, err = readFromString("_")
+	v, err = resp.ReadString("_")
 	as.Equal(resp.NullValue, v)
 	as.NotNil(err)
 	as.ErrorContains(err, "EOF")

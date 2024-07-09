@@ -23,11 +23,11 @@ func TestInteger(t *testing.T) {
 	}
 
 	for _, tc := range testCases {
-		v, err := readFromString(tc.input)
+		v, err := resp.ReadString(tc.input)
 		as.Nil(err)
 		as.Equal(resp.IntegerTag, v.Tag())
 		as.True(tc.expected.Equal(v))
-		as.Equal(tc.output, marshalToString(v))
+		as.Equal(tc.output, resp.ToString(v))
 	}
 }
 
@@ -48,11 +48,11 @@ func TestDouble(t *testing.T) {
 	}
 
 	for _, tc := range testCases {
-		v, err := readFromString(tc.input)
+		v, err := resp.ReadString(tc.input)
 		as.Nil(err)
 		as.Equal(resp.DoubleTag, v.Tag())
 		as.True(tc.expected.Equal(v))
-		as.Equal(tc.output, marshalToString(v))
+		as.Equal(tc.output, resp.ToString(v))
 	}
 }
 
@@ -86,10 +86,10 @@ func TestBigNumber(t *testing.T) {
 	}
 
 	for _, tc := range testCases {
-		v, err := readFromString(tc.input)
+		v, err := resp.ReadString(tc.input)
 		as.Nil(err)
 		as.Equal(resp.BigNumberTag, v.Tag())
 		as.True(tc.expected.Equal(v))
-		as.Equal(tc.output, marshalToString(v))
+		as.Equal(tc.output, resp.ToString(v))
 	}
 }

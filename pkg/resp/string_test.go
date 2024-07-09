@@ -20,17 +20,17 @@ func TestSimpleString(t *testing.T) {
 	}
 
 	for _, tc := range testCases {
-		v, err := readFromString(tc.input)
+		v, err := resp.ReadString(tc.input)
 		as.Nil(err)
 		as.Equal(resp.SimpleStringTag, v.Tag())
 		as.Equal(tc.expected, v.(resp.SimpleString).String())
-		as.Equal(tc.input, marshalToString(v))
+		as.Equal(tc.input, resp.ToString(v))
 	}
 }
 
 func TestSimpleStringErrors(t *testing.T) {
 	as := assert.New(t)
-	v, err := readFromString("+OK")
+	v, err := resp.ReadString("+OK")
 	as.Equal(resp.EmptySimpleString, v)
 	as.NotNil(err)
 	as.ErrorContains(err, "EOF")
@@ -49,11 +49,11 @@ func TestBulkString(t *testing.T) {
 	}
 
 	for _, tc := range testCases {
-		v, err := readFromString(tc.input)
+		v, err := resp.ReadString(tc.input)
 		as.Nil(err)
 		as.Equal(resp.BulkStringTag, v.Tag())
 		as.Equal(tc.expected, v.(resp.BulkString).String())
-		as.Equal(tc.input, marshalToString(v))
+		as.Equal(tc.input, resp.ToString(v))
 	}
 }
 
@@ -70,7 +70,7 @@ func TestBulkStringErrors(t *testing.T) {
 	}
 
 	for _, tc := range testCases {
-		v, err := readFromString(tc.input)
+		v, err := resp.ReadString(tc.input)
 		as.Equal(tc.expected, v)
 		if err != nil {
 			as.ErrorContains(err, tc.err)

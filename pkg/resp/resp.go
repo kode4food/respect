@@ -1,6 +1,7 @@
 package resp
 
 import (
+	"bufio"
 	"cmp"
 	"fmt"
 	"hash/maphash"
@@ -73,6 +74,13 @@ func hashValue(v Value) uint64 {
 	_ = h.WriteByte(byte(v.Tag()))
 	_ = v.Marshal(&h)
 	return h.Sum64()
+}
+
+func ReadString(s string, opts ...ReaderOption) (Value, error) {
+	sr := strings.NewReader(s)
+	b := bufio.NewReader(sr)
+	r := NewReader(b, opts...)
+	return r.Next()
 }
 
 func ToString(v Value) string {

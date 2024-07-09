@@ -35,11 +35,11 @@ func TestMap(t *testing.T) {
 	}
 
 	for _, tc := range testCases {
-		v, err := readFromString(tc.input)
+		v, err := resp.ReadString(tc.input)
 		as.Nil(err)
 		as.Equal(resp.MapTag, v.Tag())
 		as.True(tc.expected.Equal(v.(*resp.Map)))
-		str := marshalToString(v)
+		str := resp.ToString(v)
 		pfx := fmt.Sprintf("%%%d\r\n", len(tc.contains))
 		as.Equal(pfx, str[0:len(pfx)])
 		for _, c := range tc.contains {
@@ -51,7 +51,7 @@ func TestMap(t *testing.T) {
 func TestMapGet(t *testing.T) {
 	as := assert.New(t)
 
-	v, err := readFromString("%2\r\n+first\r\n:1\r\n+second\r\n:2\r\n")
+	v, err := resp.ReadString("%2\r\n+first\r\n:1\r\n+second\r\n:2\r\n")
 	as.Nil(err)
 	m := v.(*resp.Map)
 

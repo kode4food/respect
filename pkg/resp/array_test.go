@@ -26,10 +26,10 @@ func TestArray(t *testing.T) {
 	}
 
 	for _, tc := range testCases {
-		v, err := readFromString(tc.input)
+		v, err := resp.ReadString(tc.input)
 		as.Nil(err)
 		as.Equal(resp.ArrayTag, v.Tag())
 		testValues(t, v, tc.expected)
-		as.Equal(tc.input, marshalToString(v))
+		as.Equal(tc.input, resp.ToString(v))
 	}
 }

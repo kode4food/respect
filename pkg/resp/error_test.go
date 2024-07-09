@@ -32,7 +32,7 @@ func TestMakeError(t *testing.T) {
 
 	for _, tc := range testCases {
 		v := resp.MakeError(tc.input)
-		as.Equal(tc.expected, marshalToString(v))
+		as.Equal(tc.expected, resp.ToString(v))
 		as.Equal(tc.pfx, v.(resp.Error).Prefix())
 		as.Equal(tc.msg, v.(resp.Error).String())
 		as.True(tc.output.Equal(v))
@@ -61,11 +61,11 @@ func TestSimpleError(t *testing.T) {
 	}
 
 	for _, tc := range testCases {
-		v, err := readFromString(tc.input)
+		v, err := resp.ReadString(tc.input)
 		as.Nil(err)
 		as.Equal(resp.SimpleErrorTag, v.Tag())
 		as.Equal(tc.expected, v.(*resp.SimpleError).Error())
-		as.Equal(tc.input, marshalToString(v))
+		as.Equal(tc.input, resp.ToString(v))
 		as.Equal(tc.pfx, v.(*resp.SimpleError).Prefix())
 		as.Equal(tc.msg, v.(*resp.SimpleError).String())
 	}
@@ -99,11 +99,11 @@ func TestBulkError(t *testing.T) {
 	}
 
 	for _, tc := range testCases {
-		v, err := readFromString(tc.input)
+		v, err := resp.ReadString(tc.input)
 		as.Nil(err)
 		as.Equal(resp.BulkErrorTag, v.Tag())
 		as.Equal(tc.expected, v.(*resp.BulkError).Error())
-		as.Equal(tc.input, marshalToString(v))
+		as.Equal(tc.input, resp.ToString(v))
 		as.Equal(tc.pfx, v.(*resp.BulkError).Prefix())
 		as.Equal(tc.msg, v.(*resp.BulkError).String())
 	}

@@ -30,11 +30,11 @@ func TestSet(t *testing.T) {
 	}
 
 	for _, tc := range testCases {
-		v, err := readFromString(tc.input)
+		v, err := resp.ReadString(tc.input)
 		as.Nil(err)
 		as.Equal(resp.SetTag, v.Tag())
 		as.True(tc.expected.Equal(v.(*resp.Set)))
-		str := marshalToString(v)
+		str := resp.ToString(v)
 		pfx := fmt.Sprintf("~%d\r\n", len(tc.contains))
 		as.Equal(pfx, str[0:len(pfx)])
 		for _, c := range tc.contains {
