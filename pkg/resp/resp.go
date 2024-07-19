@@ -83,10 +83,18 @@ func ReadString(s string, opts ...ReaderOption) (Value, error) {
 	return r.Next()
 }
 
+func ReadBytes(b []byte, opts ...ReaderOption) (Value, error) {
+	return ReadString(string(b), opts...)
+}
+
 func ToString(v Value) string {
 	var sb strings.Builder
 	_ = v.Marshal(&sb)
 	return sb.String()
+}
+
+func ToBytes(v Value) []byte {
+	return []byte(ToString(v))
 }
 
 func Compare(l, r Value) int {
